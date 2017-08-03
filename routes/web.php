@@ -21,4 +21,6 @@ Route::get('/admin/learn',function () {
 });
 
 Route::post("/admin/learn",array("uses"=>"LearnController@learnInsert"));
+
+Route::post("/check-pictures",array("uses"=>"ApiController@checkPictures"));
 		

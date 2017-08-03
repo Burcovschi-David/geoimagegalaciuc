@@ -177,9 +177,9 @@ class CustomHelpers extends Controller
 				
 				$colors["red"]=$colors["red"]+$r;
 				$colors["green"]=$colors["green"]+$g;
-				$colors["red"]=$colors["red"]+$g;
+				$colors["blue"]=$colors["blue"]+$b;
 			}
-			//$colors[] = $y_array ;
+			
 			
 		}
 		
@@ -188,5 +188,11 @@ class CustomHelpers extends Controller
 		$colors["blue"]=$colors["blue"]/($height/3*$width/3);
 		
 		return $colors;
+	}
+	
+	/*********Function for getting RGB color of a image*****************/
+	/************Source: *************************/
+	static function detectHouse($path){
+		
 	}
 }

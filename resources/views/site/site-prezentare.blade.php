@@ -1,7 +1,9 @@
-<h1>Bine ati venit pe site-ul nostru</h1>
+<h1>Welcome on our website</h1>
 
-<h3>Introduceti niste poze mai jos pentru a le verifica daca sunt din Galaciuc:</h3>
+<h3>Enter pictures to check if was made at Galaciuc</h3>
 
 <form action="/check-pictures" method="POST" enctype="multipart/form-data">
-	<input type="file" name="pictures">
+	<input type="hidden" name="_token" value="{{csrf_token()}}">
+	<input type="file" name="pictures[]" multiple><br><br>
+	<input type="submit" value="Trimite!">
 </form>

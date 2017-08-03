@@ -24,6 +24,9 @@ class LearnController extends Controller
     				LearnModel::insertLearn($request->input("latitude"),$request->input("longitude"),$filename,$colorsImage["red"],1,$request->input("acurracy"));
     				LearnModel::insertLearn($request->input("latitude"),$request->input("longitude"),$filename,$colorsImage["green"],2,$request->input("acurracy"));
     				LearnModel::insertLearn($request->input("latitude"),$request->input("longitude"),$filename,$colorsImage["blue"],4,$request->input("acurracy"));
+    				if(!unlink(public_path()."/pictures/".$filename)){
+    					echo "Nu am putut sterge imaginea!";
+    				}
     			}
     		}
     	}
