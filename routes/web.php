@@ -12,5 +12,13 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('site.site-prezentare');
 });
+
+
+Route::get('/admin/learn',function () {
+	return view('admin.learn');
+});
+
+Route::post("/admin/learn",array("uses"=>"LearnController@learnInsert"));
+		
