@@ -142,4 +142,33 @@ function getImageLocationByMeta($folder,$extension,$limit=0,$lat_cerut,$lon_ceru
 
 /*******************END functions built by Burcovschi David****************************************/
 
+
+
+/*********Function for getting RGB color of a image*****************/
+/************Source: *************************/
+function getRGBImage($path){
+	$image = imagecreatefromjpeg($path); // imagecreatefromjpeg/png/
+	
+	$width = imagesx($image);
+	$height = imagesy($image);
+	$colors = array();
+	
+	for ($y = 0; $y < $height; $y++) {
+		$y_array = array() ;
+		
+		for ($x = 0; $x < $width; $x++) {
+			$rgb = imagecolorat($image, $x, $y);
+			$r = ($rgb >> 16) & 0xFF;
+			$g = ($rgb >> 8) & 0xFF;
+			$b = $rgb & 0xFF;
+			
+			$x_array = array($r, $g, $b) ;
+			$y_array[] = $x_array ;
+		}
+		$colors[] = $y_array ;
+	}
+	
+	return $colors;
+}
+
 ?>
