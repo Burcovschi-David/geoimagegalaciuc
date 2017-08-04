@@ -17,13 +17,27 @@ class LearnController extends Controller
     				$destinationPath = 'pictures/';
     				$filename = rand(1000,9999999999)."-".$picture->getClientOriginalName();
     				$picture->move($destinationPath, $filename);
-    				$colorsImage=CustomHelpers::getRGBImage(public_path()."/pictures/".$filename);
+    				
+    				
+    				$image = imagecreatefromjpeg(public_path()."/pictures/".$filename);
+    				
+    				if($image && imagefilter($image, IMG_FILTER_GRAYSCALE) && imagefilter($image, IMG_FILTER_CONTRAST, -1000))
+    				{
+    					
+    					
+    					imagejpeg($image, public_path()."/pictures/".$filename);
+    				}
+    				else
+    				{
+    					echo 'Conversion to grayscale failed.';
+    				}
+    				
+    				
+    				$hash=CustomHelpers::hashOfPicture(public_path()."/pictures/".$filename);
     				
 					//echo var_dump($colorsImage);  				
     				
-    				LearnModel::insertLearn($request->input("latitude"),$request->input("longitude"),$filename,$colorsImage["red"],1,$request->input("acurracy"));
-    				LearnModel::insertLearn($request->input("latitude"),$request->input("longitude"),$filename,$colorsImage["green"],2,$request->input("acurracy"));
-    				LearnModel::insertLearn($request->input("latitude"),$request->input("longitude"),$filename,$colorsImage["blue"],4,$request->input("acurracy"));
+    				LearnModel::insertLearn($request->input("latitude"),$request->input("longitude"),$filename,$hash,5,$request->input("acurracy"));
     				if(!unlink(public_path()."/pictures/".$filename)){
     					echo "Nu am putut sterge imaginea!";
     				}

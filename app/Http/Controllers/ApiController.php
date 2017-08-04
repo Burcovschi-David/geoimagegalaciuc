@@ -11,49 +11,38 @@ use App\APIModel;
 class ApiController extends Controller {
 	function checkPictures(Request $request) {
 		if ($request->file ( 'pictures' )) {
-			$correct_average_list=array();
+			
 			$pictures_list=array();
-			$averageImageColorsRGB=APIModel::getCorrectPicturesByLocation(45.9248,26.648);
-			$k=0;//Poza curenta
+			
+			
 			foreach ( $request->file ( 'pictures' ) as $picture ) {
-				$specificColors=$this->specificColors();
+				
 				
 				if (! empty ( $picture )) {
-					//Partea de upload
 					$destinationPath = 'pictures/';
-					$filename = rand ( 1000, 9999999999 ) . "-" . $picture->getClientOriginalName ();
-					$picture->move ( $destinationPath, $filename );
-					
-					//Partea de preluat mdiile culorilor imaginii
-					$colorsImage = CustomHelpers::getRGBImage ( public_path () . "/pictures/" . $filename );
+					$filename = rand(1000,9999999999)."-".$picture->getClientOriginalName();
+					$picture->move($destinationPath, $filename);
 					
 					
-					//var_dump($colorsImage);
+					$image = imagecreatefromjpeg(public_path()."/pictures/".$filename);
 					
-					//Fac scorul pentru giecare culoare
-					$score_r=$averageImageColorsRGB[0]-$colorsImage["red"]/2.55;
-					$score_g=$averageImageColorsRGB[0]-$colorsImage["green"]/2.55;
-					$score_b=$averageImageColorsRGB[0]-$colorsImage["blue"]/2.55;
-					
-					//Fac scoril total
-					$score=($score_b+$score_r+$score_g)/3;
-					
-					
-					$total_specific_colors=0;
-					
-					for($i=0;$i<count($specificColors);$i++){
-						if($colorsImage["red"]<$specificColors[$i][0]+30 && $colorsImage["red"]>$specificColors[$i][0]-30 
-								&& $colorsImage["blue"]<$specificColors[$i][1]+30 && $colorsImage["blue"]>$specificColors[$i][1]-30 
-								&& $colorsImage["green"]<$specificColors[$i][2]+30 && $colorsImage["green"]>$specificColors[$i][2]-30){
-							
-									$total_specific_colors=$total_specific_colors+1;
-						}else{
-							$total_specific_colors=$total_specific_colors-1;
-						}
+					if($image && imagefilter($image, IMG_FILTER_GRAYSCALE) && imagefilter($image, IMG_FILTER_CONTRAST, -1000))
+					{
+						
+						
+						imagejpeg($image, public_path()."/pictures/".$filename);
+					}
+					else
+					{
+						echo 'Conversion to grayscale failed.';
 					}
 					
+					$score=0;
+					
+					$score=APIModel::getCorrectPicturesByLocation(45.9248,26.648,md5_file(public_path () . "/pictures/" . $filename));
+					
 					//Adaug date despre poza
-					array_push($pictures_list,array("r"=>$colorsImage["red"],"g"=>$colorsImage["blue"],"b"=>$colorsImage["green"],"image_name"=>public_path () . "/pictures/" . $filename,"score"=>$score+$total_specific_colors/3));
+					array_push($pictures_list,array("image_name"=>public_path () . "/pictures/" . $filename,"score"=>$score));
 					
 					
 					

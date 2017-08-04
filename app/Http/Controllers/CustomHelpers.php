@@ -192,7 +192,14 @@ class CustomHelpers extends Controller
 	
 	/*********Function for getting RGB color of a image*****************/
 	/************Source: *************************/
-	static function detectHouse($path){
-		
+	static function hashOfPicture($path){
+		return md5_file ( $path);
+	}
+	
+	static function similarityOf2Files($path1,$path2){
+		$hash1=md5_file($path1);
+		$hash2=md5_file($path2);
+		similar_text ( $hash1 ,$hash2 ,$percent );
+		return $percent;
 	}
 }
