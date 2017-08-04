@@ -98,51 +98,43 @@ class CustomHelpers extends Controller
 	
 	/*******************Functions built by Burcovschi David***************************************/
 	/******************Function to get image location byy metas***********************************/
-	static function getImageLocationByMeta($folder,$extension,$limit=0,$lat_cerut,$lon_cerut){
+	static function getImageLocationByMeta($filename){
 		
-		$i=0;//Number of current parsed pictures
 		
-		$array_poze=array();
 		
-		foreach(glob("{$folder}/*.{$extension}") as $filename){
-			
-			$name = substr($filename, strrpos($filename, '/') + 1);
+		
+		
 			
 			// Read metadata of image
 			$headers = exif_read_data($filename,"EXIF");
 			
 			//If there are  headers with location
-			
+			//var_dump($headers);
 			if(isset($headers["GPSLatitude"]) && isset($headers["GPSLongitude"])){
 				
 				//Convert GPS degrees to decimal
-				$latitude=DMStoDEC(explode("/",$headers["GPSLatitude"][0])[0],explode("/",$headers["GPSLatitude"][1])[0],explode("/",$headers["GPSLatitude"][2])[0]);
-				$longitude=DMStoDEC(explode("/",$headers["GPSLongitude"][0])[0],explode("/",$headers["GPSLongitude"][1])[0],explode("/",$headers["GPSLongitude"][2])[0]);
+				$latitude=CustomHelpers::DMStoDEC(explode("/",$headers["GPSLatitude"][0])[0],explode("/",$headers["GPSLatitude"][1])[0],explode("/",$headers["GPSLatitude"][2])[0]);
+				$longitude=CustomHelpers::DMStoDEC(explode("/",$headers["GPSLongitude"][0])[0],explode("/",$headers["GPSLongitude"][1])[0],explode("/",$headers["GPSLongitude"][2])[0]);
 				
 				//Get location name
 				$locatie=json_decode(file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyBTsn5gxb-HtKUyo-zEaE_Z1esQN5NF2eY"),true)["results"][0]["formatted_address"];
 				//This coordinates should be by google for Galaciuc: 45.9241697,26.6481328
 				
 				//Get distance from current distance to point where picture were taken
-				$distanta_curent=distance($lat_cerut, $lon_cerut, $latitude, $longitude);
-				
-				//Add picture in list with data getted
-				array_push($array_poze,array("nume"=>$name,"latitude"=>$latitude,"longitude"=>$longitude,"are_meta"=>1,"locatie"=>$locatie,"distanta_current"=>$distanta_curent));
+				//$distanta_curent=distance($lat_cerut, $lon_cerut, $latitude, $longitude);
+				echo $latitude."/".$longitude;
+				if($latitude<46.760000 && $latitude>45.910000 && $longitude<28.1741328 && $longitude>26.6351328){
+					return 100;
+				}else{
+					
+					return 0;
+				}
 			}else{
-				//Add picture in list with data getted
-				array_push($array_poze,array("nume"=>$name,"latitude"=>-1999,"longitude"=>-1999,"are_meta"=>0));
+				return false;
 			}
 			
 			
-			$i++;
-			
-			//If limit==0 so i don't have any limit and limit == with current pictured parsed
-			if($i==$limit && $limit!=0){
-				break;//Stop
-			}
-			
-			
-		}
+
 		//Return list of pictures
 		return $array_poze;
 	}

@@ -8,7 +8,8 @@ use DB;
 
 class LearnModel extends Model {
 	static function insertLearn($latitude, $longitude, $picture, $value, $id_value, $precision) {
-		$locatie = json_decode ( file_get_contents ( "https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyBTsn5gxb-HtKUyo-zEaE_Z1esQN5NF2eY" ), true ) ["results"] [0] ["formatted_address"];
+		$locatie="Galaciuc,Vrancea";
+		//$locatie = json_decode ( file_get_contents ( "https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyBTsn5gxb-HtKUyo-zEaE_Z1esQN5NF2eY" ), true ) ["results"] [0] ["formatted_address"];
 		if (count ( DB::select ( "SELECT *FROM d_zones WHERE latitude=? AND longitude=?", array (
 				$latitude,
 				$longitude 

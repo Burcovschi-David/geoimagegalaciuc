@@ -1,6 +1,6 @@
 <style>
 #map_canvas {
-	width: 400px;
+	width: 100%;
 	height: 400px;
 }
 </style>
@@ -107,12 +107,12 @@
 		<h1 class="center-text">Input please pictures and choose location where they were made:</h1>
 		<form action="/admin/learn" method="POST" enctype="multipart/form-data">
 			<input type="hidden" name="_token" value="{{csrf_token()}}"> 
-			<input type="text" value="0" id="latitude" name="latitude"><br> 
-			<input type="text" value="0" id="longitude" name="longitude"> <br>
-			<input type="number" placeholder="Enter please acurracy in meters..." class="form-control" min="1" max="20000" step="0.5" required name="acurracy" class="form-control"><br> 
-			<input type="file" multiple placeholder="Choose correct pictures for this location...." class="form-control" required name="pictures[]"> <br><br>
-			@include("admin.map")<br>
-			<input type="submit" value="Send data set!" class="btn btn-danger form-control">
+			<input class="form-control" type="text" value="0" id="latitude" name="latitude"><br> 
+			<input class="form-control" type="text" value="0" id="longitude" name="longitude"> <br>
+			<input class="form-control" type="number" placeholder="Enter please acurracy in meters..." class="form-control" min="1" max="20000" step="0.5" required name="acurracy" class="form-control"><br> 
+			<input class="form-control" type="file" multiple placeholder="Choose correct pictures for this location...." class="form-control" required name="pictures[]"> <br><br>
+			@include("admin.map")<br><br><br>
+			<input  type="submit" value="Send data set!" class="btn btn-danger form-control" style="margin-top: 20px; position: relative;">
 		</form>
 	</div>
 </div>
