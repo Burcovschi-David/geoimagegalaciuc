@@ -39,7 +39,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<h2 style="color: red;">GeoImage IO</h2>
+				<h2 style="color: red; cursor: pointer;" onclick= "window.location='/'">GeoImage IO</h2>
 				</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
