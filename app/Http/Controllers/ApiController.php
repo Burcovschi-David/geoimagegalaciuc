@@ -14,7 +14,7 @@ class ApiController extends Controller {
 			
 			$pictures_list=array();
 			
-			
+			$suma_scor=0;
 			foreach ( $request->file ( 'pictures' ) as $picture ) {
 				
 				
@@ -23,14 +23,18 @@ class ApiController extends Controller {
 					$filename = rand(1000,9999999999)."-".$picture->getClientOriginalName();
 					$picture->move($destinationPath, $filename);
 					
-					
+					// Load
+					list($width, $height) = getimagesize(public_path()."/pictures/".$filename);
+					$thumb = imagecreatetruecolor(64, 64);
 					$image = imagecreatefromjpeg(public_path()."/pictures/".$filename);
+					// Resize
+					imagecopyresized($thumb, $image, 0, 0, 0, 0, 16, 16, $width, $height);
 					
-					if($image && imagefilter($image, IMG_FILTER_GRAYSCALE) && imagefilter($image, IMG_FILTER_CONTRAST, -1000))
+					if($thumb && imagefilter($thumb, IMG_FILTER_GRAYSCALE) && imagefilter($thumb, IMG_FILTER_CONTRAST, -1000))
 					{
 						
 						
-						imagejpeg($image, public_path()."/pictures/".$filename);
+						imagejpeg($thumb, public_path()."/pictures/".$filename);
 					}
 					else
 					{
@@ -43,7 +47,7 @@ class ApiController extends Controller {
 					
 					//Adaug date despre poza
 					array_push($pictures_list,array("image_name"=>public_path () . "/pictures/" . $filename,"score"=>$score));
-					
+					$suma_scor=$suma_scor+$score;
 					
 					
 				}
@@ -55,7 +59,7 @@ class ApiController extends Controller {
 			}
 		}
 		
-		return var_dump($pictures_list);
+		return $suma_scor;
 	}
 	
 	

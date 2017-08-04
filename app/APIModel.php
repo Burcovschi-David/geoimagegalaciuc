@@ -24,7 +24,9 @@ class APIModel extends Model {
 				
 				for($i=0;$i<count($res_value);$i++){
 					similar_text ( $hash ,$res_value[$i]->value ,$percent );
-					$average=$average+$percent;
+					if($percent>$average){
+						$average=$percent;
+					}
 					$o ++;
 				}
 				
@@ -33,6 +35,6 @@ class APIModel extends Model {
 		
 		
 		
-		return $average/$o;
+		return $average;
 	}
 }

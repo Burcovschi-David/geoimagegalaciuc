@@ -19,23 +19,27 @@ class LearnController extends Controller
     				$picture->move($destinationPath, $filename);
     				
     				
+    				// Load
+    				list($width, $height) = getimagesize(public_path()."/pictures/".$filename);
+    				$thumb = imagecreatetruecolor(64, 64);
     				$image = imagecreatefromjpeg(public_path()."/pictures/".$filename);
+    				// Resize
+    				imagecopyresized($thumb, $image, 0, 0, 0, 0, 16, 16, $width, $height);
     				
-    				if($image && imagefilter($image, IMG_FILTER_GRAYSCALE) && imagefilter($image, IMG_FILTER_CONTRAST, -1000))
+    				if($thumb && imagefilter($thumb, IMG_FILTER_GRAYSCALE) && imagefilter($thumb, IMG_FILTER_CONTRAST, -1000))
     				{
     					
     					
-    					imagejpeg($image, public_path()."/pictures/".$filename);
+    					imagejpeg($thumb, public_path()."/pictures/".$filename);
     				}
     				else
     				{
     					echo 'Conversion to grayscale failed.';
     				}
     				
-    				
     				$hash=CustomHelpers::hashOfPicture(public_path()."/pictures/".$filename);
     				
-					//echo var_dump($colorsImage);  				
+									
     				
     				LearnModel::insertLearn($request->input("latitude"),$request->input("longitude"),$filename,$hash,5,$request->input("acurracy"));
     				if(!unlink(public_path()."/pictures/".$filename)){
